@@ -511,11 +511,22 @@ function App() {
                       className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base"
                       disabled={isGeneratingVideo}
                     >
-                      <option value="1-2">1-2 minutes</option>
-                      <option value="2-3">2-3 minutes</option>
-                      <option value="3-5">3-5 minutes</option>
-                      <option value="5-10">5-10 minutes</option>
+                      <option value="1-2">1-2 minutes (Free)</option>
+                      <option value="2-3">2-3 minutes (Free)</option>
+                      <option value="3-5">3-5 minutes (Free)</option>
+                      <option value="5-10">5-10 minutes ($19/month)</option>
+                      <option value="25-30">25-30 minutes ($19/month)</option>
+                      <option value="30-45">30-45 minutes ($19/month)</option>
+                      <option value="45-60">45-60 minutes (Enterprise)</option>
+                      <option value="60-90">60-90 minutes (Enterprise)</option>
+                      <option value="90-120">90-120 minutes (Enterprise)</option>
+                      <option value="custom">Custom length (Enterprise)</option>
                     </select>
+                    <div className="mt-2 text-xs text-gray-500">
+                      <p>• Free: Up to 5 minutes</p>
+                      <p>• Pro ($19/month): Up to 45 minutes</p>
+                      <p>• Enterprise: Unlimited duration</p>
+                    </div>
                   </div>
                   
                   <div>
