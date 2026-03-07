@@ -197,14 +197,14 @@ function App() {
   const TabButton = ({ id, label, icon: Icon, active }: { id: string; label: string; icon: any; active: boolean }) => (
     <button
       onClick={() => setActiveTab(id)}
-      className={`flex items-center gap-2 px-3 sm:px-6 py-3 rounded-lg font-medium transition-all whitespace-nowrap ${
-        active 
-          ? 'bg-blue-600 text-white shadow-lg' 
-          : 'bg-white text-gray-600 hover:bg-blue-50 hover:text-blue-600 border'
+      className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-medium transition-all whitespace-nowrap border ${
+        active
+          ? 'bg-blue-600 text-white border-blue-600 shadow-lg'
+          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-blue-400'
       }`}
     >
       <Icon size={20} />
-      <span className="hidden sm:inline">{label}</span>
+      <span className="hidden sm:inline text-sm">{label}</span>
       <span className="sm:hidden text-xs">{label.split(' ')[0]}</span>
     </button>
   );
@@ -212,26 +212,26 @@ function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+      <header className="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="bg-blue-600 text-white p-2 rounded-xl">
                 <Brain size={24} />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">EduVision</h1>
-                <p className="text-sm text-gray-500 hidden sm:block">AI-Powered Learning Platform</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">EduVision</h1>
+                <p className="text-xs sm:text-sm text-gray-500 hidden sm:block">AI-Powered Learning Platform</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-2 sm:gap-4">
               <div className="flex items-center gap-2 hidden sm:flex">
                 <Globe size={18} className="text-gray-400" />
-                <select 
-                  value={selectedCountry} 
+                <select
+                  value={selectedCountry}
                   onChange={(e) => setSelectedCountry(e.target.value)}
-                  className="border rounded-lg px-3 py-1 text-sm"
+                  className="border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="auto">Auto-detect</option>
                   {countries.map(country => (
@@ -241,8 +241,8 @@ function App() {
                   ))}
                 </select>
               </div>
-              
-              <div className="flex items-center gap-2 bg-blue-50 px-2 sm:px-4 py-2 rounded-lg">
+
+              <div className="flex items-center gap-2 bg-blue-50 px-3 sm:px-4 py-2 rounded-lg border border-blue-200">
                 <User size={18} className="text-blue-600" />
                 <span className="text-sm font-medium text-blue-800 hidden sm:inline">Student Mode</span>
               </div>
@@ -452,47 +452,51 @@ function App() {
             </div>
 
             {/* Custom Video Creation Form */}
-            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 max-w-4xl mx-auto">
-              <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                <Video size={24} className="text-blue-600" />
-                <span className="hidden sm:inline">Create Custom Educational Video</span>
-                <span className="sm:hidden">Create Video</span>
+            <div className="bg-white rounded-2xl shadow-lg p-6 sm:p-8 max-w-5xl mx-auto">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2 flex items-center gap-3">
+                <div className="bg-blue-100 p-3 rounded-lg">
+                  <Video size={28} className="text-blue-600" />
+                </div>
+                Create Custom Educational Video
               </h3>
-              
-              <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                <div className="space-y-4">
+              <p className="text-gray-600 text-sm mb-8 ml-14">
+                Generate a personalized video from a custom topic or description
+              </p>
+
+              <div className="grid sm:grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+                <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Video Title</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">Video Title</label>
                     <input
                       type="text"
                       value={customVideoInput.title}
                       onChange={(e) => setCustomVideoInput(prev => ({ ...prev, title: e.target.value }))}
                       placeholder="e.g., How Photosynthesis Works"
-                      className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all"
                       disabled={isGeneratingVideo}
                     />
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Video Description</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">Video Description</label>
                     <textarea
                       value={customVideoInput.description}
                       onChange={(e) => setCustomVideoInput(prev => ({ ...prev, description: e.target.value }))}
                       placeholder="Describe what you want the video to explain or demonstrate. Be as detailed as possible..."
-                      rows={3}
-                      className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm sm:text-base"
+                      rows={4}
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none text-sm sm:text-base transition-all"
                       disabled={isGeneratingVideo}
                     />
                   </div>
                 </div>
-                
-                <div className="space-y-4">
+
+                <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Animation Style</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">Animation Style</label>
                     <select
                       value={customVideoInput.style}
                       onChange={(e) => setCustomVideoInput(prev => ({ ...prev, style: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all bg-white"
                       disabled={isGeneratingVideo}
                     >
                       <option value="animated">2D Animation</option>
@@ -502,13 +506,13 @@ function App() {
                       <option value="realistic">Realistic Simulation</option>
                     </select>
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Duration</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">Duration</label>
                     <select
                       value={customVideoInput.duration}
                       onChange={(e) => setCustomVideoInput(prev => ({ ...prev, duration: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all bg-white"
                       disabled={isGeneratingVideo}
                     >
                       <option value="1-2">1-2 minutes (Free)</option>
@@ -522,19 +526,20 @@ function App() {
                       <option value="90-120">90-120 minutes (Enterprise)</option>
                       <option value="custom">Custom length (Enterprise)</option>
                     </select>
-                    <div className="mt-2 text-xs text-gray-500">
+                    <div className="mt-3 text-xs text-gray-600 space-y-1 bg-blue-50 p-3 rounded-lg">
+                      <p className="font-medium">Pricing:</p>
                       <p>• Free: Up to 5 minutes</p>
                       <p>• Pro ($19/month): Up to 45 minutes</p>
                       <p>• Enterprise: Unlimited duration</p>
                     </div>
                   </div>
-                  
+
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Target Level</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-3">Target Level</label>
                     <select
                       value={customVideoInput.level}
                       onChange={(e) => setCustomVideoInput(prev => ({ ...prev, level: e.target.value }))}
-                      className="w-full border border-gray-300 rounded-lg px-3 sm:px-4 py-2 text-sm sm:text-base"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base transition-all bg-white"
                       disabled={isGeneratingVideo}
                     >
                       <option value="auto">Use current setting</option>
@@ -545,24 +550,22 @@ function App() {
                   </div>
                 </div>
               </div>
-              
-              <div className="mt-6 flex justify-center">
+
+              <div className="mt-8 flex justify-center">
                 <button
                   onClick={generateCustomVideo}
                   disabled={isGeneratingVideo || !customVideoInput.title.trim() || !customVideoInput.description.trim()}
-                  className="bg-blue-600 text-white px-6 sm:px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-10 py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base font-medium shadow-lg hover:shadow-xl"
                 >
                   {isGeneratingVideo ? (
                     <>
                       <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
-                      <span className="hidden sm:inline">Generating Video...</span>
-                      <span className="sm:hidden">Generating...</span>
+                      <span>Generating Custom Video...</span>
                     </>
                   ) : (
                     <>
                       <Play size={20} />
-                      <span className="hidden sm:inline">Generate Custom Video</span>
-                      <span className="sm:hidden">Generate</span>
+                      <span>Generate Custom Video</span>
                     </>
                   )}
                 </button>
@@ -571,34 +574,34 @@ function App() {
 
             {/* Video Generation Queue */}
             {videoRequests.length > 0 && (
-              <div className="bg-white rounded-xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Video Generation Queue</h3>
+              <div className="bg-white rounded-2xl shadow-lg p-6 max-w-5xl mx-auto">
+                <h3 className="text-xl font-bold text-gray-900 mb-6">Video Generation Queue</h3>
                 <div className="space-y-4">
                   {videoRequests.map(request => (
-                    <div key={request.id} className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-medium text-gray-900">{request.title}</h4>
-                        <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                          request.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
-                          request.status === 'completed' ? 'bg-green-100 text-green-800' :
+                    <div key={request.id} className="border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+                      <div className="flex items-center justify-between mb-3">
+                        <h4 className="font-semibold text-gray-900 text-lg">{request.title}</h4>
+                        <span className={`px-4 py-2 rounded-full text-sm font-medium ${
+                          request.status === 'processing' ? 'bg-amber-100 text-amber-800' :
+                          request.status === 'completed' ? 'bg-emerald-100 text-emerald-800' :
                           'bg-gray-100 text-gray-800'
                         }`}>
                           {request.status === 'processing' ? 'Generating...' :
                            request.status === 'completed' ? 'Ready to View' : 'Pending'}
                         </span>
                       </div>
-                      
-                      <p className="text-gray-600 text-sm mb-3">{request.description}</p>
-                      
-                      <div className="flex items-center gap-4 text-xs text-gray-500">
-                        <span>Style: {request.style}</span>
-                        <span>Duration: {request.duration} min</span>
-                        <span>Level: {educationLevels.find(l => l.id === request.level)?.label || request.level}</span>
+
+                      <p className="text-gray-600 text-sm mb-4">{request.description}</p>
+
+                      <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm text-gray-600 mb-4">
+                        <span className="bg-gray-50 px-3 py-1 rounded-full">Style: {request.style}</span>
+                        <span className="bg-gray-50 px-3 py-1 rounded-full">Duration: {request.duration} min</span>
+                        <span className="bg-gray-50 px-3 py-1 rounded-full">Level: {educationLevels.find(l => l.id === request.level)?.label || request.level}</span>
                       </div>
-                      
+
                       {request.status === 'completed' && (
-                        <div className="mt-3">
-                          <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2">
+                        <div className="mt-4">
+                          <button className="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2 font-medium text-sm">
                             <Play size={16} />
                             Watch Video
                           </button>
@@ -615,29 +618,28 @@ function App() {
               <div className="space-y-6">
                 <div className="text-center">
                   <h3 className="text-xl font-bold text-gray-900 mb-2">Or Generate from Uploaded Content</h3>
-                  <p className="text-gray-600">Quick video suggestions based on your uploaded materials</p>
+                  <p className="text-gray-600 text-sm">Quick video suggestions based on your uploaded materials</p>
                 </div>
-                
+
                 {uploadedContent.map(content => (
-                  <div key={content.id} className="bg-white rounded-xl shadow-lg p-6">
-                    <h4 className="text-lg font-bold text-gray-900 mb-4">Video Suggestions for "{content.title}"</h4>
-                    
-                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div key={content.id} className="bg-white rounded-2xl shadow-lg p-6 max-w-5xl mx-auto w-full">
+                    <h4 className="text-lg font-bold text-gray-900 mb-6">Video Suggestions for "{content.title}"</h4>
+
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
                       {content.videoSuggestions.map((suggestion, idx) => (
-                        <div key={idx} className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                          <div className="bg-gradient-to-br from-purple-100 to-blue-100 p-4 rounded-lg mb-3">
-                            <Play size={32} className="text-purple-600 mx-auto" />
+                        <div key={idx} className="border border-gray-200 rounded-xl p-5 hover:shadow-lg transition-all hover:border-blue-300">
+                          <div className="bg-gradient-to-br from-blue-100 to-cyan-100 p-5 rounded-xl mb-4">
+                            <Play size={36} className="text-blue-600 mx-auto" />
                           </div>
-                          
-                          <h5 className="font-medium text-gray-900 mb-2 text-sm sm:text-base">{suggestion}</h5>
-                          
+
+                          <h5 className="font-semibold text-gray-900 mb-4 text-sm sm:text-base leading-snug">{suggestion}</h5>
+
                           <button
                             onClick={() => generateVideo(suggestion)}
-                            className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
+                            className="w-full bg-blue-600 text-white py-2.5 px-4 rounded-lg hover:bg-blue-700 transition-all flex items-center justify-center gap-2 text-sm sm:text-base font-medium"
                           >
                             <Play size={16} />
-                            <span className="hidden sm:inline">Generate Video</span>
-                            <span className="sm:hidden">Generate</span>
+                            <span>Generate Video</span>
                           </button>
                         </div>
                       ))}
