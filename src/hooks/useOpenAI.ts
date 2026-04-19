@@ -28,11 +28,11 @@ export function useOpenAI() {
     try {
       // Extract text from image/file
       const extractedText = await extractTextFromImage(file);
-      
+
       // Process the content
       const processedContent = await processTextContent(extractedText, targetLevel, country);
-      
-      // Generate questions
+
+      // Generate questions in parallel with content processing
       const questions = await generateQuestions(
         processedContent.content,
         processedContent.level,

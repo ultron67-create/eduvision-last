@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, BookOpen, Video, Globe, User, Brain, FileText, Play, Settings, Search, ChevronRight, Star, Target, Lightbulb, QrCode, Smartphone } from 'lucide-react';
+import { Upload, BookOpen, Video, Globe, User, Brain, FileText, Play, Settings, Search, ChevronRight, Star, Target, Lightbulb, QrCode, Smartphone, CreditCard } from 'lucide-react';
 import { useOpenAI } from './hooks/useOpenAI';
+import { PricingTab } from './components/PricingTab';
 
 interface Student {
   id: string;
@@ -259,6 +260,7 @@ function App() {
           <TabButton id="videos" label="Create Videos" icon={Video} active={activeTab === 'videos'} />
           <TabButton id="research" label="Deep Research" icon={Search} active={activeTab === 'research'} />
           <TabButton id="mobile" label="Mobile Access" icon={QrCode} active={activeTab === 'mobile'} />
+          <TabButton id="pricing" label="Pricing" icon={CreditCard} active={activeTab === 'pricing'} />
         </div>
 
         {/* Upload Tab */}
@@ -834,7 +836,7 @@ function App() {
                         {window.location.origin}
                       </code>
                     </div>
-                    <button 
+                    <button
                       onClick={() => navigator.clipboard.writeText(window.location.origin)}
                       className="mt-2 text-blue-600 hover:text-blue-700 text-sm font-medium"
                     >
@@ -868,6 +870,11 @@ function App() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Pricing Tab */}
+        {activeTab === 'pricing' && (
+          <PricingTab />
         )}
       </div>
     </div>
