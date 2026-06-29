@@ -1,11 +1,58 @@
 import OpenAI from 'openai';
 
-// Initialize OpenAI client
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_OPENAI_API_KEY,
+// Check if API key is available
+const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
+const hasApiKey = Boolean(apiKey && apiKey.trim() !== '');
+
+// Initialize OpenAI client only if API key is available
+const openai = hasApiKey ? new OpenAI({
+  apiKey: apiKey,
   organization: import.meta.env.VITE_OPENAI_ORG_ID,
   dangerouslyAllowBrowser: true // Note: In production, use a backend proxy
-});
+}) : null;
+
+// Demo content for when API key is not available
+const demoContent = {
+  title: "Photosynthesis: The Foundation of Life",
+  level: "high",
+  subject: "Biology",
+  content: "Photosynthesis is a vital biological process that occurs in plants, algae, and some bacteria. This process converts light energy, usually from the sun, into chemical energy stored in glucose molecules. The basic equation for photosynthesis is: 6CO₂ + 6H₂O + light energy → C₆H₁₂O₆ + 6O₂. Key components include chloroplasts, chlorophyll, and stomata.",
+  keyPoints: [
+    "Photosynthesis converts light energy to chemical energy",
+    "Occurs in chloroplasts using chlorophyll",
+    "Produces oxygen and glucose",
+    "Essential for most life on Earth",
+    "Forms the base of food chains"
+  ],
+  difficulty: 'high' as const
+};
+
+const demoQuestions = [
+  {
+    id: `q_demo_1`,
+    question: "What is the primary purpose of photosynthesis?",
+    difficulty: 'easy' as const,
+    answer: "To convert light energy into chemical energy stored in glucose",
+    examples: ["Plants growing in sunlight", "Algae in ponds producing oxygen"],
+    explanation: "Photosynthesis is the process by which plants use sunlight to create food in the form of glucose."
+  },
+  {
+    id: `q_demo_2`,
+    question: "What role does chlorophyll play in photosynthesis?",
+    difficulty: 'medium' as const,
+    answer: "Chlorophyll is the green pigment that captures light energy from the sun",
+    examples: ["Green leaves absorbing sunlight", "Plants appearing green due to chlorophyll reflection"],
+    explanation: "Chlorophyll absorbs light energy, which is then used to power the chemical reactions of photosynthesis."
+  },
+  {
+    id: `q_demo_3`,
+    question: "Why is photosynthesis important for life on Earth?",
+    difficulty: 'hard' as const,
+    answer: "It produces oxygen for most life forms, forms the base of food chains, and removes carbon dioxide from the atmosphere",
+    examples: ["Forest producing oxygen", "Ocean phytoplankton as food source", "Carbon dioxide absorption by trees"],
+    explanation: "Photosynthesis is essential for maintaining atmospheric balance and providing energy for virtually all ecosystems."
+  }
+];
 
 export interface ProcessedContent {
   title: string;
@@ -38,10 +85,17 @@ export interface VideoScript {
 
 // Extract and process text content from uploaded material
 export async function processTextContent(
-  text: string, 
+  text: string,
   targetLevel: string = 'auto',
   country: string = 'auto'
 ): Promise<ProcessedContent> {
+  // If no API key, return demo content
+  if (!hasApiKey || !openai) {
+    console.log('No API key configured, using demo content');
+    await new Promise(resolve => setTimeout(resolve, 300)); // Brief delay for UX
+    return demoContent;
+  }
+
   try {
     const prompt = `
     Analyze the following educational content and extract key information:
@@ -78,7 +132,7 @@ export async function processTextContent(
     });
 
     const result = JSON.parse(response.choices[0].message.content || '{}');
-    
+
     return {
       title: result.title || 'Educational Content',
       level: result.level || 'undergraduate',
@@ -100,6 +154,13 @@ export async function generateQuestions(
   count: number = 3,
   country: string = 'auto'
 ): Promise<GeneratedQuestion[]> {
+  // If no API key, return demo questions
+  if (!hasApiKey || !openai) {
+    console.log('No API key configured, using demo questions');
+    await new Promise(resolve => setTimeout(resolve, 200));
+    return demoQuestions.slice(0, count);
+  }
+
   try {
     const prompt = `
     Based on this educational content, generate ${count} questions appropriate for ${level} level students:
@@ -135,7 +196,7 @@ export async function generateQuestions(
     });
 
     const questions = JSON.parse(response.choices[0].message.content || '[]');
-    
+
     return questions.map((q: any, index: number) => ({
       id: `q_${Date.now()}_${index}`,
       question: q.question || '',
@@ -158,6 +219,36 @@ export async function generateVideoScript(
   duration: string,
   level: string
 ): Promise<VideoScript> {
+  // If no API key, return demo video script
+  if (!hasApiKey || !openai) {
+    console.log('No API key configured, using demo video script');
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return {
+      title: title,
+      scenes: [
+        {
+          duration: 30,
+          description: "Opening scene introducing the topic",
+          narration: `Welcome to this educational video about ${title}. Let's explore this fascinating topic together.`,
+          visualElements: ["Animated title", "Topic introduction graphics"]
+        },
+        {
+          duration: 60,
+          description: "Main concept explanation",
+          narration: description,
+          visualElements: ["Concept diagrams", "Animated illustrations"]
+        },
+        {
+          duration: 30,
+          description: "Summary and key takeaways",
+          narration: "Let's recap what we've learned today...",
+          visualElements: ["Summary points", "Key takeaways animation"]
+        }
+      ],
+      totalDuration: duration
+    };
+  }
+
   try {
     const prompt = `
     Create a detailed video script for an educational video:
@@ -198,7 +289,7 @@ export async function generateVideoScript(
     });
 
     const script = JSON.parse(response.choices[0].message.content || '{}');
-    
+
     return {
       title: script.title || title,
       scenes: script.scenes || [],
@@ -221,6 +312,23 @@ export async function generateResearchInsights(
   careerConnections: string;
   realWorldExamples: string[];
 }> {
+  // If no API key, return demo insights
+  if (!hasApiKey || !openai) {
+    console.log('No API key configured, using demo research insights');
+    await new Promise(resolve => setTimeout(resolve, 300));
+    return {
+      currentApplications: "Photosynthesis research is advancing with artificial leaf technology and renewable energy applications.",
+      relatedFields: "Biochemistry, Environmental Science, Agriculture, Climate Science, Biotechnology",
+      careerConnections: "Plant biologists, environmental scientists, agricultural researchers, and biotechnology engineers all work with photosynthesis principles.",
+      realWorldExamples: [
+        "Vertical farming using optimized light for photosynthesis",
+        "Carbon capture technologies inspired by plant processes",
+        "Biofuel production from algae photosynthesis",
+        "Agricultural optimization of crop yields through light management"
+      ]
+    };
+  }
+
   try {
     const prompt = `
     Provide comprehensive research insights for this educational content:
@@ -257,7 +365,7 @@ export async function generateResearchInsights(
     });
 
     const insights = JSON.parse(response.choices[0].message.content || '{}');
-    
+
     return {
       currentApplications: insights.currentApplications || '',
       relatedFields: insights.relatedFields || '',
@@ -273,13 +381,13 @@ export async function generateResearchInsights(
 // OCR Text extraction (placeholder - would need additional OCR service)
 export async function extractTextFromImage(imageFile: File): Promise<string> {
   // This would typically use an OCR service like Google Vision API
-  // For now, we'll simulate OCR extraction
+  // For demo purposes, return sample content quickly
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(`
         Photosynthesis: The Foundation of Life
 
-        Photosynthesis is a vital biological process that occurs in plants, algae, and some bacteria. 
+        Photosynthesis is a vital biological process that occurs in plants, algae, and some bacteria.
         This process converts light energy, usually from the sun, into chemical energy stored in glucose molecules.
 
         The basic equation for photosynthesis is:
@@ -296,6 +404,6 @@ export async function extractTextFromImage(imageFile: File): Promise<string> {
         - Removes carbon dioxide from the atmosphere
         - Essential for ecosystem balance
       `);
-    }, 2000);
+    }, 300);
   });
 }

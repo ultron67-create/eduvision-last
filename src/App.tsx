@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Upload, BookOpen, Video, Globe, User, Brain, FileText, Play, Settings, Search, ChevronRight, Star, Target, Lightbulb, QrCode, Smartphone, CreditCard } from 'lucide-react';
+import React, { useState } from 'react';
+import { Upload, BookOpen, Video, Globe, User, Brain, FileText, Play, Search, ChevronRight, Star, Target, Lightbulb, QrCode, Smartphone, CreditCard, AlertCircle, X } from 'lucide-react';
 import { useOpenAI } from './hooks/useOpenAI';
 import { PricingTab } from './components/PricingTab';
 
@@ -11,6 +11,13 @@ interface Student {
   subjects: string[];
 }
 
+interface ResearchInsights {
+  currentApplications: string;
+  relatedFields: string;
+  careerConnections: string;
+  realWorldExamples: string[];
+}
+
 interface UploadedContent {
   id: string;
   title: string;
@@ -19,6 +26,7 @@ interface UploadedContent {
   content: string;
   questions: Question[];
   videoSuggestions: string[];
+  researchInsights?: ResearchInsights;
 }
 
 interface Question {
@@ -41,7 +49,6 @@ interface VideoRequest {
 }
 function App() {
   const [activeTab, setActiveTab] = useState('upload');
-  const [student, setStudent] = useState<Student | null>(null);
   const [uploadedContent, setUploadedContent] = useState<UploadedContent[]>([]);
   const [selectedLevel, setSelectedLevel] = useState('auto');
   const [selectedCountry, setSelectedCountry] = useState('auto');
@@ -253,6 +260,23 @@ function App() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+        {/* Error Display */}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-3">
+            <AlertCircle size={20} className="text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <h4 className="font-semibold text-red-800">Error</h4>
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+            <button
+              onClick={clearError}
+              className="text-red-600 hover:text-red-800 transition-colors"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        )}
+
         {/* Navigation Tabs */}
         <div className="flex gap-2 sm:gap-4 mb-6 sm:mb-8 overflow-x-auto pb-2">
           <TabButton id="upload" label="Upload Content" icon={Upload} active={activeTab === 'upload'} />
